@@ -1,4 +1,7 @@
 import streamlit as st
+# import pickle as pkl
+# import os
+
 import requests
 from pydantic import BaseModel
 
@@ -15,6 +18,13 @@ def main():
     petal_length = st.slider("Petal Length", 0.0, 10.0, 5.0)
     petal_width = st.slider("Petal Width", 0.0, 10.0, 5.0)
 
+    # features = {
+    #     "sepal_length": sepal_length,
+    #     "sepal_width": sepal_width,
+    #     "petal_length": petal_length,
+    #     "petal_width": petal_width
+    # }
+
     features = Request(
         sepal_length=sepal_length,
         sepal_width=sepal_width,
@@ -27,6 +37,13 @@ def main():
 
 
 def predict(features):
+    # model = load_model()
+    # encoder = load_encoder()
+    # input_data = list(features.values())
+    # prediction = model.predict([input_data])
+    # prediction = encoder.inverse_transform(prediction)[0]
+    # st.success(f"The iris species is {prediction}")
+
     endpoint = "http://localhost:8000/predict"
 
     response = requests.post(endpoint, json=features.model_dump())
@@ -34,6 +51,16 @@ def predict(features):
     result = result["prediction"]
 
     st.success(f"The iris species is {result}")
+
+# def load_model():
+#     with open("model.pkl", "rb") as f:
+#         model = pkl.load(f)
+#     return model
+
+# def load_encoder():
+#     with open("encoder.pkl", "rb") as f:
+#         encoder = pkl.load(f)
+#     return encoder
 
 if __name__ == "__main__":
     main()
